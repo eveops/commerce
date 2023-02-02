@@ -5,6 +5,7 @@ ruby "3.2.0"
 
 gem "rails", github: "rails/rails", branch: "main"
 
+gem "config", "~> 4.1"
 gem "sprockets-rails", "~> 3.4"
 gem "pg", "~> 1.4"
 gem "puma", "~> 6.0"

@@ -18,7 +18,5 @@ module EveCommerce
     config.load_defaults 7.1
 
     config.active_job.queue_adapter = :sidekiq
-
-    config.site = config_for(:site)
   end
 end
