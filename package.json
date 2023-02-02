@@ -14,7 +14,7 @@
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
     "lint": "eslint \"./**/*.js\" --cache --cache-strategy content",
     "lint:fix": "eslint \"./**/*.js\" --fix",
-    "markdownlint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#CHANGELOG\"",
+    "markdownlint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#CHANGELOG.md\"",
     "markdownlint:fix": "markdownlint-cli2-fix \"**/*.md\" \"#node_modules\" \"#CHANGELOG.md\"",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write ."
