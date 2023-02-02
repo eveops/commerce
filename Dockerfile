@@ -1,65 +1,82 @@
 # syntax = docker/dockerfile:1
 
-# Make sure it matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.2.0
-FROM ruby:$RUBY_VERSION-slim as base
+# Base image for Ruby.
+FROM ruby:3.2-alpine as base
 
-# Rails app lives here
-WORKDIR /rails
+ENV RAILS_ENV="production"
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_WITHOUT="development"
+RUN adduser -D app
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base as builder
 
-# Install packages need to build gems and node modules
-RUN apt-get update -qq && \
-    apt-get install -y build-essential curl default-libmysqlclient-dev git libpq-dev libvips node-gyp pkg-config python-is-python3 redis
-
-# Install JavaScript dependencies
-ARG NODE_VERSION=18.12.1
+ARG NODE_VERSION=18.13.0
 ARG YARN_VERSION=1.22.19
-ENV VOLTA_HOME="/usr/local"
-RUN curl https://get.volta.sh | bash && \
-    volta install node@$NODE_VERSION yarn@$YARN_VERSION
 
-# Install application gems
+ENV BUNDLE_FROZEN=true
+ENV BUNDLE_JOBS=4
+ENV BUNDLE_RETRY=3
+ENV BUNDLE_TIMEOUT=10
+ENV BUNDLE_WITHOUT="development,test"
+
+RUN apk --no-cache --update add \
+    build-base \
+    curl \
+    git \
+    libc6-compat \
+    nodejs \
+    tzdata \
+    postgresql-dev \
+    libxslt-dev \
+    libxml2-dev \
+    vips-dev \
+    yarn
+
+RUN mkdir -p /app
+WORKDIR /app
+
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    bundle exec bootsnap precompile --gemfile
+RUN bundle install --jobs=$BUNDLE_JOBS \
+    && bundle exec bootsnap precompile --gemfile \
+    && rm -rf /usr/local/bundle/cache/*.gem \
+    && find /usr/local/bundle/gems/ -name "*.c" -delete \
+    && find /usr/local/bundle/gems/ -name "*.o" -delete
 
-
-# Install node modules
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
-# Copy application code
 COPY . .
 
-# Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 
 # Final stage for app image
 FROM base
 
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y default-mysql-client libsqlite3-0 libvips postgresql-client redis && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+ENV RAILS_MAX_THREADS=5
+ENV RAILS_MIN_THREADS=5
+ENV RUBY_YJIT_ENABLE=1
 
-# Copy built artifacts: gems, application
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
+RUN apk --no-cache --update add \
+    libc6-compat \
+    postgresql-client \
+    redis \
+    tzdata
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+RUN mkdir -p /app
+COPY --from=builder /usr/local/bundle /usr/local/bundle
+COPY --from=builder /app /app
 
-# Start the server by default, this can be overwritten at runtime
+WORKDIR /app
+RUN mkdir -p log storage tmp/{cache,pids,sockets} \
+    && chown -R app log storage tmp
+
+USER app
+
 EXPOSE 3000
+
+ENTRYPOINT ["/app/bin/docker-entrypoint.sh"]
 CMD ["./bin/rails", "server"]

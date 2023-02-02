@@ -4,7 +4,7 @@
 /.git/
 
 # Ignore bundler config.
-/.bundle
+/.bundle/
 
 # Ignore all default key files.
 /config/master.key
@@ -37,3 +37,14 @@
 /app/assets/builds/*
 !/app/assets/builds/.keep
 /public/assets
+
+# Ignore local settings
+/config/environments/*.local.yml
+/config/settings.local.yml
+/config/settings/*.local.yml
+
+# Ignore tests
+/test/
+
+# Ignore editor configuration
+/.vscode/
