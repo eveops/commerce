@@ -1,4 +1,5 @@
 /app/assets/builds/**/*
+/dist/**/*
 /node_modules/**/*
 /public/assets/**/*
 /vendor/**/*
