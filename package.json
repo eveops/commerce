@@ -12,14 +12,18 @@
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint": "eslint \"./**/*.js\" --cache --cache-strategy content",
+    "lint:fix": "eslint \"./**/*.js\" --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write ."
   },
   "devDependencies": {
     "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0",
-    "eslint-plugin-promise": "^6.0.0"
+    "eslint-plugin-promise": "^6.0.0",
+    "prettier": "^2.8.3"
   }
 }
