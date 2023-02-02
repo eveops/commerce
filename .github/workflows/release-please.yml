@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+      - main
+
+name: Release Please
+
+permissions: write-all
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          command: manifest
+          config-file: .github/release-config.json
+          manifest-file: .github/release-manifest.json
+          default-branch: main

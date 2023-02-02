@@ -1,51 +1,42 @@
-on:
-  push:
-    branches:
-      - main
-
 name: Release
 
 permissions: write-all
 
+on:
+  push:
+    tags:
+      - v*.*.*
+
 jobs:
-  Release:
-    runs-on: ubuntu-latest
+  package:
+    name: Package
+    runs-on: 'ubuntu-22.04'
     steps:
-      - uses: google-github-actions/release-please-action@v3
-        id: release
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          command: manifest
-          config-file: .github/release-config.json
-          manifest-file: .github/release-manifest.json
-          default-branch: main
       - uses: actions/checkout@v3
-        if: ${{ steps.release.outputs.releases_created }}
-        with:
-          ref: ${{ steps.release.outputs.tag_name }}
       - uses: actions/setup-node@v3
-        if: ${{ steps.release.outputs.releases_created }}
         with:
           node-version-file: .node-version
           cache: yarn
+      - run: yarn install --frozen-lockfile
       - uses: ruby/setup-ruby@v1
-        if: ${{ steps.release.outputs.releases_created }}
         with:
           bundler-cache: true
-      - if: ${{ steps.release.outputs.releases_created }}
+      - env:
+          RAILS_ENV: production
+          SECRET_KEY_BASE_DUMMY: 1
         run: |
-          yarn install --frozen-lockfile
-          RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
-          bin/rails release:package VERSION=${{ steps.release.outputs.tag_name }}
+          bin/rails assets:precompile package
+
+  docker:
+    name: Docker
+    runs-on: 'ubuntu-22.04'
+    steps:
+      - uses: actions/checkout@v3
       - uses: docker/setup-qemu-action@v2
-        if: ${{ steps.release.outputs.releases_created }}
       - uses: docker/setup-buildx-action@v2
-        if: ${{ steps.release.outputs.releases_created }}
       - run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-        if: ${{ steps.release.outputs.releases_created }}
       - id: meta
         uses: docker/metadata-action@v4
-        if: ${{ steps.release.outputs.releases_created }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           images: ghcr.io/bokoboshahni/eve_commerce
@@ -60,10 +51,9 @@ jobs:
             org.opencontainers.image.source=https://github.com/bokoboshahni/eve_commerce/tree/main
             org.opencontainers.image.licenses=MIT
       - uses: docker/build-push-action@v3
-        if: ${{ steps.release.outputs.releases_created }}
         with:
           platforms: linux/amd64
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           build-args: |
             GIT_SHA=${{ github.sha }}
             GIT_REF=${{ github.ref_name }}
