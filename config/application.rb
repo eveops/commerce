@@ -17,6 +17,15 @@ module EveCommerce
   class Application < Rails::Application
     config.load_defaults 7.1
 
+    uri = URI(Settings.site.url)
+    port = uri.port
+    host = [80, 443].include?(port) ? uri.host : "#{uri.host}:#{port}"
+
+    # ActiveJob configuration
     config.active_job.queue_adapter = :sidekiq
+
+    # ActionMailer configuration
+    config.action_mailer.asset_host = Settings.site.assets_url || Settings.site.url
+    config.action_mailer.default_url_options = {host:}
   end
 end

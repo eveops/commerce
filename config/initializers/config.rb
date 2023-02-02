@@ -4,11 +4,11 @@ Config.setup do |config|
   config.env_prefix = 'EVE_COMMERCE'
   config.env_separator = '__'
 
-  # Validate presence and type of specific config values. Check https://github.com/dry-rb/dry-validation for details.
-  #
-  # config.schema do
-  #   required(:name).filled
-  #   required(:age).maybe(:int?)
-  #   required(:email).filled(format?: EMAIL_REGEX)
-  # end
+  config.schema do
+    required(:site).schema do 
+      optional(:assets_url).filled(format?: URI.regexp)
+      required(:name).filled(:string)
+      required(:url).filled(format?: URI.regexp)
+    end
+  end
 end

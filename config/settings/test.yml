@@ -1,2 +1,5 @@
 rack_mini_profiler:
   start_hidden: true
+
+site:
+  url: http://localhost:3000
