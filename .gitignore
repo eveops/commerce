@@ -40,3 +40,6 @@
 /config/environments/*.local.yml
 /config/settings.local.yml
 /config/settings/*.local.yml
+
+# Ignore eslint cache
+/.eslintcache
