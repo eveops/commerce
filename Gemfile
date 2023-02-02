@@ -35,6 +35,8 @@ group :development, :test do
 end
 
 group :development do
+  gem "brakeman", "~> 5.4", require: false
+  gem "bundle-audit", "~> 0.1.0", require: false
   gem "error_highlight", "~> 0.5"
   gem "web-console", "~> 4.2"
 end
@@ -44,3 +46,5 @@ group :test do
   gem "selenium-webdriver", "~> 4.8"
   gem "webdrivers", "~> 5.2"
 end
+
+
