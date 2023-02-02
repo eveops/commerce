@@ -117,9 +117,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           images: ghcr.io/bokoboshahni/eve_commerce
-          build-args: |
-            GIT_SHA=${{ github.sha }}
-            GIT_REF=${{ github.ref_name }}
           tags: |
             type=edge,branch=main
             type=ref,event=branch
@@ -137,5 +134,8 @@ jobs:
         with:
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+            GIT_REF=${{ github.ref_name }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
