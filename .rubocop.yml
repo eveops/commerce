@@ -1,0 +1,25 @@
+inherit_from:
+  - .rubocop_todo.yml
+  - .rubocop/bundler.yml
+  - .rubocop/rake.yml
+  - .rubocop/rails.yml
+  - .rubocop/minitest.yml
+
+inherit_mode:
+  merge:
+    - Exclude
+
+require:
+  - standard
+
+inherit_gem:
+  standard: config/ruby-3.0.yml
+
+AllCops:
+  SuggestExtensions: false
+  TargetRubyVersion: 3.2
+  Exclude:
+    - '**/bin/**/*'
+    - '**/node_modules/**/*'
+    - '**/tmp/**/*'
+    - '**/vendor/**/*'
