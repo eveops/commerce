@@ -18,6 +18,8 @@ gem "kredis", "~> 1.3"
 gem "bcrypt", "~> 3.1"
 gem "bootsnap", "~> 1.16", require: false
 gem "rack-mini-profiler", "~> 3.0"
+gem "sidekiq", "~> 7.0"
+gem "sidekiq-scheduler", "~> 5.0"
 
 group :development, :test do
   gem "debug", "~> 1.7"
