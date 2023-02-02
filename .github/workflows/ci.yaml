@@ -1,0 +1,138 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lint-javascript:
+    name: Lint (JavaScript)
+    runs-on: 'ubuntu-22.04'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: |
+          yarn lint
+          yarn markdownlint
+          yarn prettier
+
+  lint-ruby:
+    name: Lint (Ruby)
+    runs-on: 'ubuntu-22.04'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: |
+          bundle exec rubocop -P
+          bundle exec erblint --format compact --lint-all
+          # bundle exec i18n-tasks health
+
+  lint-docker:
+    name: Lint (Docker)
+    runs-on: 'ubuntu-22.04'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - uses: hadolint/hadolint-action@v3.0.0
+        with:
+          dockerfile: Dockerfile
+
+  security-ruby:
+    name: Security (Ruby)
+    runs-on: 'ubuntu-22.04'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: |
+          bundle exec brakeman -q
+          bundle exec bundle-audit -uq
+
+  security-javascript:
+    name: Security (JavaScript)
+    runs-on: 'ubuntu-22.04'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn audit
+
+  # test-javascript:
+  #   name: Test (JavaScript)
+  #   runs-on: 'ubuntu-22.04'
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version-file: .node-version
+  #         cache: yarn
+  #     - run: yarn install --frozen-lockfile
+  #     - run: yarn test
+  #     - uses: codecov/codecov-action@v3
+
+  test-ruby:
+    name: Test (Ruby)
+    runs-on: 'ubuntu-22.04'
+    steps:
+      - uses: ankane/setup-postgres@v1
+        with:
+          postgres-version: 15
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - env:
+          RAILS_ENV: test
+          SECRET_KEY_BASE: dummy
+        run: |
+          bin/rails db:prepare
+          bin/rails test
+      # - uses: codecov/codecov-action@v3
+
+  docker:
+    name: Docker
+    runs-on: 'ubuntu-22.04'
+    needs:
+      - lint-docker
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-buildx-action@v2
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+      - id: meta
+        uses: docker/metadata-action@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          images: ghcr.io/bokoboshahni/eve_commerce
+          tags: |
+            type=edge,branch=main
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+          labels: |
+            org.opencontainers.image.title=eve_commerce
+            org.opencontainers.image.description=EVE Commerce provides a suite of tools for market analysis, trading, and procurement in EVE Online.
+            org.opencontainers.image.vendor=Bokobo Shahni
+            org.opencontainers.image.documentation=https://github.com/bokoboshahni/eve_commerce/blob/main/README.md
+            org.opencontainers.image.source=https://github.com/bokoboshahni/eve_commerce/tree/main
+            org.opencontainers.image.licenses=MIT
+      - uses: docker/build-push-action@v3
+        with:
+          platforms: linux/amd64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
