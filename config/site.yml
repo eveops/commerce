@@ -1,0 +1,2 @@
+shared:
+  name: "<%= ENV.fetch("EVE_COMMERCE_SITE_NAME", "EVE Commerce") %>"
