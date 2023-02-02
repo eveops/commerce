@@ -1,5 +1,7 @@
+/.github/release-manifest.json
 /app/assets/builds/**/*
 /dist/**/*
 /node_modules/**/*
 /public/assets/**/*
 /vendor/**/*
+/CHANGELOG.md
