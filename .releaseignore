@@ -37,5 +37,6 @@
 !/tmp/sockets/.keep
 
 /node_modules
+/vendor/bundle
 
 /dist
