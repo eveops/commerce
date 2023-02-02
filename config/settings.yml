@@ -1,2 +1,6 @@
+rack_mini_profiler:
+  position: bottom-right
+  start_hidden: false
+
 site:
   name: EVE Commerce

@@ -1,0 +1,2 @@
+rack_mini_profiler:
+  start_hidden: true
