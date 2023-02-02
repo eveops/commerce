@@ -54,11 +54,15 @@ RUN bundle exec bootsnap precompile app/ lib/ \
 # Final stage for app image
 FROM base
 
+ARG GIT_SHA
+ARG GIT_REF
+
 ENV RAILS_MAX_THREADS=5
 ENV RAILS_MIN_THREADS=5
 ENV RUBY_YJIT_ENABLE=1
 
 RUN apk --no-cache --update add \
+    bash \
     libc6-compat \
     postgresql-client \
     redis \
@@ -70,11 +74,13 @@ COPY --from=builder /app /app
 
 WORKDIR /app
 RUN mkdir -p log storage tmp/{cache,pids,sockets} \
+    && echo "$GIT_SHA" > git_sha \
+    && echo "$GIT_REF" > git_ref \
     && chown -R app log storage tmp
 
 USER app
 
 EXPOSE 3000
 
-ENTRYPOINT ["/app/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/app/bin/docker-entrypoint"]
 CMD ["./bin/rails", "server"]
