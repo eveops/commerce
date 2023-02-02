@@ -26,18 +26,18 @@ gem "turbo-rails", "~> 1.3"
 
 group :development, :test do
   gem "debug", "~> 1.7"
-  gem "erb_lint", "~> 0.3.1", require: false
-  gem "rubocop-minitest", "~> 0.27.0", require: false
-  gem "rubocop-performance", "~> 1.15", require: false
-  gem "rubocop-rails", "~> 2.17", require: false
-  gem "rubocop-rake", "~> 0.6.0", require: false
-  gem "standard", "~> 1.22", require: false
 end
 
 group :development do
   gem "brakeman", "~> 5.4", require: false
   gem "bundle-audit", "~> 0.1.0", require: false
+  gem "erb_lint", "~> 0.3.1", require: false
   gem "error_highlight", "~> 0.5"
+  gem "rubocop-minitest", "~> 0.27.0", require: false
+  gem "rubocop-performance", "~> 1.15", require: false
+  gem "rubocop-rails", "~> 2.17", require: false
+  gem "rubocop-rake", "~> 0.6.0", require: false
+  gem "standard", "~> 1.22", require: false
   gem "web-console", "~> 4.2"
 end
 
@@ -46,5 +46,3 @@ group :test do
   gem "selenium-webdriver", "~> 4.8"
   gem "webdrivers", "~> 5.2"
 end
-
-
