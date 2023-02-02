@@ -2,5 +2,10 @@ rack_mini_profiler:
   position: bottom-right
   start_hidden: false
 
+rails:
+  assume_ssl: false
+  force_ssl: false
+
 site:
   name: EVE Commerce
+  url: http://localhost:3000
