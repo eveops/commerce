@@ -43,3 +43,6 @@
 
 # Ignore eslint cache
 /.eslintcache
+
+# Ignore dist directory
+/dist

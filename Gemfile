@@ -33,6 +33,7 @@ group :development do
   gem "bundle-audit", "~> 0.1.0", require: false
   gem "erb_lint", "~> 0.3.1", require: false
   gem "error_highlight", "~> 0.5"
+  gem "fast_ignore", "~> 0.17.4", require: false
   gem "rubocop-minitest", "~> 0.27.0", require: false
   gem "rubocop-performance", "~> 1.15", require: false
   gem "rubocop-rails", "~> 2.17", require: false

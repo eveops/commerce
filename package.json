@@ -15,7 +15,7 @@
     "lint": "eslint \"./**/*.js\" --cache --cache-strategy content",
     "lint:fix": "eslint \"./**/*.js\" --fix",
     "markdownlint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
-    "markdownlint:fix": "markdownlint-cli2-fix \"**/*.md\" \"#node_modules\"",
+    "markdownlint:fix": "markdownlint-cli2-fix \"**/*.md\" \"#node_modules\" \"CHANGELOG.md\"",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write ."
   },
