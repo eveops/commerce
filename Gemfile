@@ -6,6 +6,7 @@ ruby "3.2.0"
 gem "rails", github: "rails/rails", branch: "main"
 
 gem "bcrypt", "~> 3.1"
+gem "better_html", "~> 2.0"
 gem "bootsnap", "~> 1.16", require: false
 gem "config", "~> 4.1"
 gem "cssbundling-rails", "~> 1.1"
@@ -25,6 +26,7 @@ gem "turbo-rails", "~> 1.3"
 
 group :development, :test do
   gem "debug", "~> 1.7"
+  gem "erb_lint", "~> 0.3.1", require: false
   gem "rubocop-minitest", "~> 0.27.0", require: false
   gem "rubocop-performance", "~> 1.15", require: false
   gem "rubocop-rails", "~> 2.17", require: false
