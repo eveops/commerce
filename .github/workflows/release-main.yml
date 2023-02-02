@@ -1,0 +1,72 @@
+on:
+  push:
+    branches:
+      - main
+
+name: Release
+
+permissions: write-all
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          command: manifest
+          config-file: .github/release-config.json
+          manifest-file: .github/release-manifest.json
+          default-branch: main
+      - uses: actions/checkout@v3
+        if: ${{ steps.release.outputs.releases_created }}
+        with:
+          ref: ${{ steps.release.outputs.tag_name }}
+      - uses: actions/setup-node@v3
+        if: ${{ steps.release.outputs.releases_created }}
+        with:
+          node-version-file: .node-version
+          cache: yarn
+      - uses: ruby/setup-ruby@v1
+        if: ${{ steps.release.outputs.releases_created }}
+        with:
+          bundler-cache: true
+      - if: ${{ steps.release.outputs.releases_created }}
+        run: |
+          yarn install --frozen-lockfile
+          RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
+          bin/rails release:package VERSION=${{ steps.release.outputs.tag_name }}
+      - uses: docker/setup-qemu-action@v2
+        if: ${{ steps.release.outputs.releases_created }}
+      - uses: docker/setup-buildx-action@v2
+        if: ${{ steps.release.outputs.releases_created }}
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+        if: ${{ steps.release.outputs.releases_created }}
+      - id: meta
+        uses: docker/metadata-action@v4
+        if: ${{ steps.release.outputs.releases_created }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          images: ghcr.io/bokoboshahni/eve_commerce
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+            GIT_REF=${{ github.ref_name }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+          labels: |
+            org.opencontainers.image.title=eve_commerce
+            org.opencontainers.image.description=EVE Commerce provides a suite of tools for market analysis, trading, and procurement in EVE Online.
+            org.opencontainers.image.vendor=Bokobo Shahni
+            org.opencontainers.image.documentation=https://github.com/bokoboshahni/eve_commerce/blob/main/README.md
+            org.opencontainers.image.source=https://github.com/bokoboshahni/eve_commerce/tree/main
+            org.opencontainers.image.licenses=MIT
+      - uses: docker/build-push-action@v3
+        if: ${{ steps.release.outputs.releases_created }}
+        with:
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
