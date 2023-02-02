@@ -31,9 +31,8 @@ RUN apk --no-cache --update add \
     libxslt-dev \
     libxml2-dev \
     vips-dev \
-    yarn
-
-RUN mkdir -p /app
+    yarn \
+    && mkdir -p /app
 WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
@@ -48,9 +47,8 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
-RUN bundle exec bootsnap precompile app/ lib/
-
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN bundle exec bootsnap precompile app/ lib/ \
+    && SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 
 # Final stage for app image
@@ -64,9 +62,9 @@ RUN apk --no-cache --update add \
     libc6-compat \
     postgresql-client \
     redis \
-    tzdata
+    tzdata \
+    && mkdir -p /app
 
-RUN mkdir -p /app
 COPY --from=builder /usr/local/bundle /usr/local/bundle
 COPY --from=builder /app /app
 
