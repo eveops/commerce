@@ -7,7 +7,7 @@ namespace :release do
 
     dry_run = ENV.key?("DRY_RUN")
     version = ENV.fetch("VERSION", nil)
-    version = version.delete_prefix('v') if version
+    version = version.delete_prefix("v") if version
 
     root_dir = Bundler.root
     dist_dir = File.join(root_dir, "dist")
