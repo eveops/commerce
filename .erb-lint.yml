@@ -1,8 +1,8 @@
 ---
-glob: "**/*.{html,text}{+*,}.erb"
+glob: '**/*.{html,text}{+*,}.erb'
 exclude:
-  - "**/vendor/**/*"
-  - "**/node_modules/**/*"
+  - '**/vendor/**/*'
+  - '**/node_modules/**/*'
 EnableDefaultLinters: true
 linters:
   ErbSafety:
