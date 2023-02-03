@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/bokoboshahni/eve_commerce/compare/v0.1.2...v0.1.3) (2023-02-03)
+
+
+### Miscellaneous Chores
+
+* Release 0.1.3 ([f5d38a4](https://github.com/bokoboshahni/eve_commerce/commit/f5d38a4b54ec8be5c3a9da23d42941817f0fb2f9))
+
 ## [0.1.2](https://github.com/bokoboshahni/eve_commerce/compare/v0.1.1...v0.1.2) (2023-02-02)
 
 
