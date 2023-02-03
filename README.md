@@ -1,8 +1,8 @@
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/eveops/commerce?style=for-the-badge)
-
 # EVEOps Commerce
 
-**🚧 Coming Soon 🚧**
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/eveops/commerce?style=for-the-badge)
+
+🚧 **Coming Soon** 🚧
 
 **EVEOps Commerce** provides a suite of tools for market analysis, trading, and procurement in [EVE Online](https://eveonline.com).
 
