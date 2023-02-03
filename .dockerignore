@@ -48,3 +48,7 @@
 
 # Ignore editor configuration
 /.vscode/
+
+# Ignore release directories
+/dist/
+/pkg/

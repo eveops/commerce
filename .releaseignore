@@ -40,3 +40,4 @@
 /vendor/bundle
 
 /dist
+/pkg
