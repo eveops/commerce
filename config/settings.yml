@@ -7,5 +7,5 @@ rails:
   force_ssl: false
 
 site:
-  name: EVE Commerce
+  name: EVEOps Commerce
   url: http://localhost:3000

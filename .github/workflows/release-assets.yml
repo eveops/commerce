@@ -47,16 +47,16 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          images: ghcr.io/bokoboshahni/eve_commerce
+          images: ghcr.io/eveops/commerce
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
           labels: |
-            org.opencontainers.image.title=eve_commerce
-            org.opencontainers.image.description=EVE Commerce provides a suite of tools for market analysis, trading, and procurement in EVE Online.
+            org.opencontainers.image.title=eveops-commerce
+            org.opencontainers.image.description=EVEOps Commerce provides a suite of tools for market analysis, trading, and procurement in EVE Online.
             org.opencontainers.image.vendor=Bokobo Shahni
-            org.opencontainers.image.documentation=https://github.com/bokoboshahni/eve_commerce/blob/main/README.md
-            org.opencontainers.image.source=https://github.com/bokoboshahni/eve_commerce/tree/main
+            org.opencontainers.image.documentation=https://github.com/eveops/commerce/blob/main/README.md
+            org.opencontainers.image.source=https://github.com/eveops/commerce/tree/main
             org.opencontainers.image.licenses=MIT
       - uses: docker/build-push-action@v4
         with:
