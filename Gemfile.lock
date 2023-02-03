@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: e90ca08d8061614c58d2b91762cbb10e1aa6058a
+  revision: 834ae02904da6237a1989b198ae55934e7fe3efa
   branch: main
   specs:
     actioncable (7.1.0.alpha)
@@ -207,7 +207,7 @@ GEM
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mail (2.8.0.1)
+    mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
       net-pop
