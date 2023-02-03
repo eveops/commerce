@@ -1,6 +1,6 @@
 # EVEOps Commerce
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/eveops/commerce?style=for-the-badge)
+![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/eveops/commerce/ci.yml?style=for-the-badge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/eveops/commerce?style=for-the-badge) ![Discord](https://img.shields.io/discord/1070848046444843028?label=Discord&style=for-the-badge)
 
 🚧 **Coming Soon** 🚧
 
