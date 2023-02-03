@@ -2,8 +2,10 @@
   "bootstrap-sha": "2d4fe2754c315c82367b28d1972412defa365f89",
   "packages": {
     ".": {
+      "draft": true,
       "release-type": "simple",
-      "bump-minor-pre-major": true
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
     }
   },
   "plugins": [
