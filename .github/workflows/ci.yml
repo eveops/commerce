@@ -7,6 +7,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  packages: write
+
 jobs:
   lint-javascript:
     name: Lint (JavaScript)
