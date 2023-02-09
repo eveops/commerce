@@ -28,7 +28,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "markdownlint": "^0.27.0",
     "markdownlint-cli2": "^0.6.0",
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.4",
     "standard-markdown": "^7.1.0"
   }
 }
