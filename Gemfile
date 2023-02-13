@@ -38,7 +38,7 @@ group :development do
   gem "rubocop-performance", "~> 1.15", require: false
   gem "rubocop-rails", "~> 2.17", require: false
   gem "rubocop-rake", "~> 0.6.0", require: false
-  gem "standard", "~> 1.22", require: false
+  gem "standard", "~> 1.24", require: false
   gem "web-console", "~> 4.2"
 end
 
